@@ -1,37 +1,269 @@
 # opencti-writeup
 My experience using OpenCTI for threat intel
+ صور:
+# OpenCTI Deployment using Docker & Docker Compose  
+### تشغيل ونشر منصة OpenCTI باستخدام Docker على Ubuntu
 
+---
 
+# 🇸🇦 المحتوى العربي
 
+## 📌 مقدمة  
+هذا المشروع يحتوي على تهيئة كاملة لتشغيل منصة **OpenCTI** باستخدام Docker و Docker Compose، مع ضبط جميع التبعيات مثل Elasticsearch و Redis و MinIO و RabbitMQ بالإضافة إلى مجموعة من الـ Connectors الجاهزة.
 
+تم إعداد هذا التوثيق لشرح خطوات التثبيت، التجهيز، التشغيل، والتحقق بشكل كامل.
 
+---
 
+## 📁 هيكل المشروع
+```
+.
+└── nawafOpecti
+    └── docker
+        ├── docker-compose.yml
+        ├── docker-compose.dev.yml
+        ├── rabbitmq.conf
+        ├── README.md
+        └── renovate.json
+```
 
+---
 
+## ⚙️ متطلبات التشغيل
+- نظام Linux (يفضّل Ubuntu 22.04 أو 24.04)
+- Docker Engine
+- Docker Compose Plugin
+- ذاكرة RAM لا تقل عن 8GB
 
-<img width="2551" height="1259" alt="23bdb6c9-2b64-445b-82a0-48b03e8fc09c" src="https://github.com/user-attachments/assets/9834f73c-7223-4e7a-8bfc-2310c20f0e92" />
+---
 
+## 🐳 تثبيت Docker على Ubuntu
+```bash
+sudo apt update
+sudo apt upgrade -y
+sudo apt install ca-certificates curl gnupg -y
 
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
+sudo apt update
+sudo apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
+```
 
+---
 
+## 🧪 التحقق من تثبيت Docker
+```bash
+docker info
+docker ps
+```
 
+---
 
+## 📄 ملف البيئة `.env`
+> ⚠️ تمت إزالة التوكنات الحقيقية واستبدالها بقيم آمنة
 
-# تجربتي مع OpenCTI
+```
+OPENCTI_ADMIN_EMAIL=admin@opencti.io
+OPENCTI_ADMIN_PASSWORD=<REPLACE_ME>
+OPENCTI_ADMIN_TOKEN=<REPLACE_ME>
+OPENCTI_BASE_URL=http://localhost:8080
+OPENCTI_HEALTHCHECK_ACCESS_KEY=<REPLACE_ME>
 
-## ما هو OpenCTI؟
-OpenCTI هو منصة مفتوحة المصدر لتحليل التهديدات السيبرانية.
+MINIO_ROOT_USER=<REPLACE_ME>
+MINIO_ROOT_PASSWORD=<REPLACE_ME>
 
-## التجربة:
-- قمت بتنصيب OpenCTI على بيئة Ubuntu.
-- ربطت بين OpenCTI و MISP و ElasticSearch.
-- جربت أرفع Indicators of Compromise (IOCs) وأراقب كيف يتم تحليلها وربطها مع الكيانات الأخرى.
+RABBITMQ_DEFAULT_USER=guest
+RABBITMQ_DEFAULT_PASS=guest
 
-## الملفات:
-- [تقرير PDF عن التجربة](./my_opencti_report.pdf)
-- [سكربت تنصيب OpenCTI](./install_opencti.sh)
+ELASTIC_MEMORY_SIZE=4G
 
-## صور:
-![](./images/dashboard.png)
+CONNECTOR_HISTORY_ID=<REPLACE_ME>
+CONNECTOR_EXPORT_FILE_STIX_ID=<REPLACE_ME>
+CONNECTOR_EXPORT_FILE_CSV_ID=<REPLACE_ME>
+CONNECTOR_IMPORT_FILE_STIX_ID=<REPLACE_ME>
+
+SMTP_HOSTNAME=localhost
+```
+
+---
+
+## 🚀 تشغيل OpenCTI
+انتقل لمجلد المشروع:
+
+```bash
+cd nawafOpecti/docker
+docker compose up -d
+```
+
+---
+
+## 🔍 التحقق من تشغيل الخدمات
+```bash
+docker compose ps
+```
+
+---
+
+## 🌐 الدخول إلى OpenCTI
+بعد أن تصبح كل الخدمات **healthy**:
+
+```
+http://<YOUR-SERVER-IP>:8080
+```
+
+مثال:
+
+```
+http://192.168.121.132:8080
+```
+
+### بيانات الدخول:
+- Email: `admin@opencti.io`
+- Password: التي وضعتها في `.env`
+
+---
+
+---
+
+# 🇺🇸 English Documentation
+
+## 📌 Overview  
+This repository contains a full deployment setup for **OpenCTI** using Docker and Docker Compose.  
+The deployment includes Redis, Elasticsearch, MinIO, RabbitMQ, and multiple connectors.
+
+This document explains installation, configuration, and startup in a complete and clear manner.
+
+---
+
+## 📁 Project Structure
+```
+.
+└── nawafOpecti
+    └── docker
+        ├── docker-compose.yml
+        ├── docker-compose.dev.yml
+        ├── rabbitmq.conf
+        ├── README.md
+        └── renovate.json
+```
+
+---
+
+## ⚙️ Requirements
+- Linux (Ubuntu recommended)
+- Docker Engine
+- Docker Compose Plugin
+- At least 8GB RAM
+
+---
+
+## 🐳 Install Docker on Ubuntu
+```bash
+sudo apt update
+sudo apt upgrade -y
+sudo apt install ca-certificates curl gnupg -y
+
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt update
+sudo apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
+```
+
+---
+
+## 🧪 Verify Docker Installation
+```bash
+docker info
+docker ps
+```
+
+---
+
+## 📄 Environment File `.env`
+> ⚠️ All sensitive values were removed  
+> Replace `<REPLACE_ME>` with your own secure values
+
+```
+OPENCTI_ADMIN_EMAIL=admin@opencti.io
+OPENCTI_ADMIN_PASSWORD=<REPLACE_ME>
+OPENCTI_ADMIN_TOKEN=<REPLACE_ME>
+OPENCTI_BASE_URL=http://localhost:8080
+OPENCTI_HEALTHCHECK_ACCESS_KEY=<REPLACE_ME>
+
+MINIO_ROOT_USER=<REPLACE_ME>
+MINIO_ROOT_PASSWORD=<REPLACE_ME>
+
+RABBITMQ_DEFAULT_USER=guest
+RABBITMQ_DEFAULT_PASS=guest
+
+ELASTIC_MEMORY_SIZE=4G
+
+CONNECTOR_HISTORY_ID=<REPLACE_ME>
+CONNECTOR_EXPORT_FILE_STIX_ID=<REPLACE_ME>
+CONNECTOR_EXPORT_FILE_CSV_ID=<REPLACE_ME>
+CONNECTOR_IMPORT_FILE_STIX_ID=<REPLACE_ME>
+
+SMTP_HOSTNAME=localhost
+```
+
+---
+
+## 🚀 Start OpenCTI
+```bash
+cd nawafOpecti/docker
+docker compose up -d
+```
+
+---
+
+## 🔍 Check running services
+```bash
+docker compose ps
+```
+
+---
+
+## 🌐 Access OpenCTI
+Once all services become **healthy**:
+
+```
+http://<YOUR-SERVER-IP>:8080
+```
+
+Example:
+
+```
+http://192.168.121.132:8080
+```
+
+### Login credentials:
+- Email: `admin@opencti.io`
+- Password: your `.env` password
+
+---
+
+## 📜 Changelog
+- Added full OpenCTI Docker deployment  
+- Removed all sensitive secrets/tokens for security  
+- Includes documentation in Arabic & English  
+
+---
+
+# 🎉 Done!  
+هذا الملف جاهز 100% للرفع على GitHub.  
+تبي أجهز لك نسخة منسقة كـ **GitHub Releases** أو **Wiki Page**؟  
+
