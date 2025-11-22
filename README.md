@@ -143,4 +143,12 @@ http://192.158.200.88:8080
 
 # 🎉 Done!  
  
+## 🔗 مصادر رسمية
+
+- [دليل التثبيت الرسمي لـ OpenCTI](https://docs.opencti.io/latest/deployment/installation/)  
+- [مستودع منصة OpenCTI على GitHub](https://github.com/OpenCTI-Platform/opencti)  
+- [مستودع Connectors الرسمي لـ OpenCTI](https://github.com/OpenCTI-Platform/connectors)  
+- [توثيق OpenCTI (Docs)](https://github.com/OpenCTI-Platform/docs)
+
+-  https://www.youtube.com/watch?v=h-q1lRsAhKM&t=80s
 
