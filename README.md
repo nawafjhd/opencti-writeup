@@ -1,6 +1,6 @@
 # opencti-writeup
 My experience using OpenCTI for threat intel
- صور:
+<img width="1908" height="932" alt="image" src="https://github.com/user-attachments/assets/20300d1d-471b-46a7-a7d4-fe8768a17dff" />
 # OpenCTI Deployment using Docker & Docker Compose  
 ### تشغيل ونشر منصة OpenCTI باستخدام Docker على Ubuntu
 
@@ -264,6 +264,5 @@ http://192.168.121.132:8080
 ---
 
 # 🎉 Done!  
-هذا الملف جاهز 100% للرفع على GitHub.  
-تبي أجهز لك نسخة منسقة كـ **GitHub Releases** أو **Wiki Page**؟  
+ 
 
